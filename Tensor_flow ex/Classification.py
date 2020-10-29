@@ -60,3 +60,42 @@ eval_result = classifier.evaluate(
     input_fn=lambda: input_fn(test, test_y, training=False))
 
 print('\nTest set accuracy: {accuracy:0.3f}\n'.format(**eval_result))
+
+#predictions
+def input_fn(features, batch_size=256):
+    #Convert the inputs to a dataset without labeels
+    return tf.data.Dataset.from_tensor_slices(dict(features)).batch(batch_size)
+
+features = ['SepalLength', 'SepalWidth', 'PetalLength', 'PetalWidth']
+predict = {}
+
+print("Please type numeric values as prompted.")
+for feature in features:
+  valid = True
+  while valid: 
+    val = input(feature + ": ")
+    if not val.isdigit(): valid = False
+
+  predict[feature] = [float(val)]
+
+predictions = classifier.predict(input_fn=lambda: input_fn(predict))
+for pred_dict in predictions:
+    class_id = pred_dict["class_ids"][0]
+    probability = pred_dict["probabilities"][class_id]
+
+    print('Prediction is "{}" ({:.1f}%)'.format(
+        SPECIES[class_id], 100 * probability))
+
+# Here is some example input and expected classes you can try above
+expected = ['Setosa', 'Versicolor', 'Virginica']
+predict_x = {
+    'SepalLength': [5.1, 5.9, 6.9],
+    'SepalWidth': [3.3, 3.0, 3.1],
+    'PetalLength': [1.7, 4.2, 5.4],
+    'PetalWidth': [0.5, 1.5, 2.1],
+}
+
+#clustering
+#yeet
+
+#Hidden Markov Model
