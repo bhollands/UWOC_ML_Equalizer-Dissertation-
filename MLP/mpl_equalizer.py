@@ -48,9 +48,11 @@ epochs = 30
 
 model = Sequential()
 
-model.add(Dense(2, activation='sigmoid'))
+model.add(Dense(1, activation='sigmoid'))
 model.add(Dropout(0.1))
-model.add(Dense(3, activation='relu'))
+model.add(Dense(5, activation='relu'))
+model.add(Dropout(0.1))
+model.add(Dense(5, activation='relu'))
 model.add(Dropout(0.1))
 model.add(Dense(num_classes, activation='softmax'))
 
