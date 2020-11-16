@@ -22,25 +22,11 @@ PAMsymRx = pd.read_csv(Rx_datapath)
 PAMsymTx_Array = PAMsymTx.values #turn value into usable numpy array
 PAMsymRx_Array = PAMsymRx.values
 
-Tx_1D = PAMsymTx_Array.flatten() #make the arrays 1D and easier to use
-Rx_1D = PAMsymRx_Array.flatten()
 
-Tx_split = np.array_split(Tx_1D, 2)
-Tx_train = Tx_split[0]
-Tx_test = Tx_split[1]
+(X_train, X_test, y_train, y_test) = train_test_split(
+    PAMsymRx_Array, PAMsymTx_Array, test_size = 0.15, random_state=42
+) #75% for training 25% for testing
 
-Rx_split = np.array_split(Rx_1D, 2)
-Rx_train = Rx_split[0]
-Rx_test = Rx_split[1]
-
-
-Rx_train_sm, _, Tx_train_sm, _ = train_test_split( #option of only using % of the dataset for faster testing
-    Rx_train,Tx_train, test_size = 0.9
-)
-
-Rx_test_sm, _, Tx_test_sm, _ = train_test_split( #option of only using % of the dataset for faster testing
-    Rx_test,Tx_test, test_size = 0.9
-)
 
 batch_size = 128
 num_classes = 2
@@ -59,12 +45,12 @@ model.add(Dense(num_classes, activation='softmax'))
 #model.summary()
 
 model.compile(loss='mse', optimizer=RMSprop(), metrics=['accuracy'])
-history = model.fit(Rx_train_sm, Tx_train_sm,
+history = model.fit(X_train, y_train,
                     batch_size=batch_size,
                     epochs=epochs,
                     verbose=1,
-                    validation_data=(Rx_test_sm, Tx_test_sm))
-score = model.evaluate(Rx_test_sm,Tx_test_sm, verbose=0)
+                    validation_data=(X_test, y_test))
+score = model.evaluate(X_test,y_test, verbose=0)
 print('Test loss:', score[0])
 print('Test Accuracy:', score[1])
 
