@@ -29,18 +29,18 @@ PAMsymRx_Array = PAMsymRx.values
 
 
 batch_size = 128
-num_classes = 2
-epochs = 30
+num_classes = 1
+epochs = 5
 
 model = Sequential()
 
-model.add(Dense(1, activation='sigmoid'))
-model.add(Dropout(0.1))
-model.add(Dense(5, activation='relu'))
-model.add(Dropout(0.1))
-model.add(Dense(5, activation='relu'))
-model.add(Dropout(0.1))
-model.add(Dense(num_classes, activation='softmax'))
+model.add(Dense(1, activation='tanh'))
+#model.add(Dropout(0.1))
+model.add(Dense(5, activation='tanh'))
+#model.add(Dropout(0.1))
+model.add(Dense(5, activation='tanh'))
+#model.add(Dropout(0.1))
+model.add(Dense(num_classes, activation='tanh'))
 
 #model.summary()
 
