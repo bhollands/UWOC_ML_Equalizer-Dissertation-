@@ -33,13 +33,13 @@ PAMsymRx_Array = PAMsymRx.values
 ) #75% for training 25% for testing
 
 
-X_train = X_train.reshape((1,853416,1))
-y_train = y_train.reshape((1,853416,1))
+# X_train = X_train.reshape((1,853416,1))
+# y_train = y_train.reshape((1,853416,1))
 
-X_test = X_test.reshape((1, 150603, 1))
-y_test = y_test.reshape((1, 150603, 1))
+# X_test = X_test.reshape((1, 150603, 1))
+# y_test = y_test.reshape((1, 150603, 1))
 
-print(X_test.shape)
+#print(X_test.shape)
 
 
 #max_review_length = 500
@@ -47,13 +47,13 @@ print(X_test.shape)
 #X_test = sequence.pad_sequences(X_test, maxlen=max_review_length)
 
 no_input_dim = X_train.size
-print(X_train)
+#print(X_train)
 
 model = Sequential()
 
 model.add(LSTM(128, input_shape = (853416, 1))) # LSTM with 100 internal units
 model.add(Dense(2, activation='softmax'))
-print(model.summary())
+#print(model.summary())
 
 
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
