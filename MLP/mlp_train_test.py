@@ -17,13 +17,12 @@ myData = loadmat('POF60m_PAMExp_2PAM_DR600Mbps(single column).mat')
 
 Rx = myData['PAMsymRx']#.reshape((1,-1))
 Tx = myData['PAMsymTx']#.reshape((1,-1))
-print(Tx)
 
 PAMsymRx_Array = Rx[0:1004020] #set to 1004040 for full dataset
 PAMsymTx_Array = Tx[0:1004020]
 
 (X_train, X_test, y_train, y_test) = train_test_split(
-    PAMsymRx_Array, PAMsymTx_Array, test_size = 0.01, random_state=42
+    PAMsymRx_Array, PAMsymTx_Array, test_size = 0.15, random_state=42
 ) #75% for training 25% for testing
 
 

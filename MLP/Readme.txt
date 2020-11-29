@@ -12,8 +12,8 @@ openpyxl (3.0.5)
 scipy (1.5.2)
 
 ---To run--- 
-Please run mlp_train_test.py - This uses the 600Mbps sinlge column dataset for training and testing
-To use trained model on the larger 600Mbps dataset run mlp_load_model. 
+Please run 'mlp_train_test.py' - This uses the 600Mbps sinlge column dataset for training and testing
+To use trained model on the larger 600Mbps dataset run 'mlp_load_model.py' 
 
 ---Results---
 MSE Loss and Accuracy will print out to terminal
@@ -23,3 +23,7 @@ Each column is labled as 0,1,2 they are as follows
 0 - Network output
 1 - What was input to the NN
 2 - A perfect Output
+
+Best Achived loss - 0.68 
+
+So far, have been unable to beat this platue disite many sizes of nnetwork or amaount of training data

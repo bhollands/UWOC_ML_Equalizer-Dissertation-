@@ -1,7 +1,3 @@
-'''
-Script below is for loading trained model and passing new data through it
-'''
-
 import pandas as pd
 import numpy as np
 import os
