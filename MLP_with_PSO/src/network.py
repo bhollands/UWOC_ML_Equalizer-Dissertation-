@@ -193,7 +193,7 @@ class FeedForwardNeuralNetwork : #activation function can be selected from outsi
     '''
     def saveBestPos(self, position):
         pos = pd.DataFrame(position) #turn the array into a dataframe
-        filePath = 'Best_Particle_position\Best_Particle_Position_'+self.activationFunc+'_'+self.file_select +'.csv' #define the file path
+        filePath = 'MLP_with_PSO/Best_Particle_position/Best_Particle_Position_'+self.activationFunc+'_'+self.file_select +'.csv' #define the file path
         pos.to_csv(filePath, index = False)#export
         return 0
 
@@ -203,7 +203,7 @@ class FeedForwardNeuralNetwork : #activation function can be selected from outsi
     def train (self, X, y, numParticels,posRange,velRange,iWeightRange,c, epochs, print_step): #modify training class to do it internally
         numOfDim = self.calcNumOfDims() #find the number of dimensions
         swarm  = Swarm(numParticels, numOfDim, posRange, velRange, iWeightRange, c) #make the particle swarm
-        fitness_data = swarm.search(self.feedForward, X, y, print_step, epochs, self.file_select) #search for the solution
+        fitness_data = swarm.search(self.feedForward, X, y, print_step, epochs) #search for the solution
         best_pos = swarm.get_best_solution() #get the best solution
         self.saveBestPos(best_pos) #save best position
         predication = self.predict(X, best_pos) #get the output

@@ -11,25 +11,25 @@ class data_reader:
         if file_select == "cubic":
             self.one_input = True
             correctSpelling = True
-            DataSetPath = "src\Data\OneIn_cubic.csv"
+            DataSetPath = "MLP_with_PSO\src\Data\OneIn_cubic.csv"
         elif file_select == "linear":
             self.one_input = True
             correctSpelling = True
-            DataSetPath = "src\Data\OneIn_linear.csv"
+            DataSetPath = "MLP_with_PSO\src\Data\OneIn_linear.csv"
         elif file_select == "sine":
             self.one_input = True
             correctSpelling = True
-            DataSetPath = "src\Data\OneIn_sine.csv"
+            DataSetPath = "MLP_with_PSO\src\Data\OneIn_sine.csv"
         elif file_select == "tanh":
             self.one_input = True
             correctSpelling = True
-            DataSetPath = "src\Data\OneIn_tanh.csv"
+            DataSetPath = "MLP_with_PSO\src\Data\OneIn_tanh.csv"
         elif file_select == "complex":
             correctSpelling = True
-            DataSetPath = "src\Data\TwoIn_complex.csv"
+            DataSetPath = "MLP_with_PSO\src\Data\TwoIn_complex.csv"
         elif file_select == "xor":
             correctSpelling = True
-            DataSetPath = "src\Data\TwoIn_xor.csv"
+            DataSetPath = "MLP_with_PSO\src\Data\TwoIn_xor.csv"
         # elif file_select == "user_custom_data":
         #     self.one_input = True #if single input
         #     correctSpelling = True

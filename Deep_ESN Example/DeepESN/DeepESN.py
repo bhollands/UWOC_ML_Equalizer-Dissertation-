@@ -201,17 +201,20 @@ class DeepESN():
         # compute the global state of DeepESN with pre-training if DeepIP == 1         
         
         if self.IPconf.DeepIP and DeepIP:
+
             if verbose:
                 sys.stdout.write('compute state with DeepIP...')
                 sys.stdout.flush()
             states = self.computeDeepIntrinsicPlasticity(inputs)
-        else:      
+        else:
+     
             if verbose:
                 sys.stdout.write('compute state...')
                 sys.stdout.flush()
             states = []
 
             for i_seq in range(len(inputs)):
+                print("Computing State: ", i_seq)
                 states.append(self.computeGlobalState(inputs[i_seq], initialStates))
                 
         if verbose:        
@@ -229,6 +232,7 @@ class DeepESN():
 
 
         for layer in range(self.Nl):
+            print("Computing Layer: ", layer)
             if initialStates is not None:
                 initialStatesLayer = initialStates[(layer)*self.Nr: (layer+1)*self.Nr,:]            
             state[(layer)*self.Nr: (layer+1)*self.Nr,:] = self.computeLayerState(input, layer, initialStatesLayer, 0)    

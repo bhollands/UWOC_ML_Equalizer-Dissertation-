@@ -25,34 +25,45 @@ http://www.di.unipi.it/groups/ciml/
 '''
 
 import numpy as np
+import pandas as pd
 import random
 from DeepESN import DeepESN
-from utils import MSE, config_MG, load_MG, select_indexes
+from scipy.io import loadmat
+from utils import MSE, config_MG, load_MG, select_indexes 
 class Struct(object): pass
 
+
+def saveOutputResults(predict):
+    newArr = np.column_stack((predict))
+    predict = pd.DataFrame(newArr)
+
+    output_filepath = 'Deep_ESN Example\Results\_results_DeepESN.xlsx'
+    #fitness_filepath = 'NN_output data\_fitness_results_'+file +'_'+activeFunc+'.xlsx'
+    predict.to_excel(output_filepath, index = False)
+    #fitness.to_excel(fitness_filepath, index = False)
 # sistemare indici per IP in config_pianomidi, mettere da un'altra parte
 # sistema selezione indici con transiente messi all'interno della rete
+
+
 def main():
-    
+
     # fix a seed for the reproducibility of results
     np.random.seed(7)
-   
+
     # dataset path 
-    path = 'datasets'
+    path = 'Deep_ESN Example\datasets'
     dataset, Nu, error_function, optimization_problem, TR_indexes, VL_indexes, TS_indexes = load_MG(path, MSE)
 
     # load configuration for pianomidi task
     configs = config_MG(list(TR_indexes) + list(VL_indexes))
-    
+ 
     # Be careful with memory usage
     Nr = 100 # number of recurrent units
     Nl = 5 # number of recurrent layers
     reg = 0.0
     transient = 100
-    
     deepESN = DeepESN(Nu, Nr, Nl, configs)
     states = deepESN.computeState(dataset.inputs, deepESN.IPconf.DeepIP)
-    
     train_states = select_indexes(states, list(TR_indexes) + list(VL_indexes), transient)
     train_targets = select_indexes(dataset.targets, list(TR_indexes) + list(VL_indexes), transient)
     test_states = select_indexes(states, TS_indexes)
@@ -63,11 +74,12 @@ def main():
     train_outputs = deepESN.computeOutput(train_states)
     train_error = error_function(train_outputs, train_targets)
     print('Training ACC: ', np.mean(train_error), '\n')
-    
     test_outputs = deepESN.computeOutput(test_states)
+ 
+    
     test_error = error_function(test_outputs, test_targets)
     print('Test ACC: ', np.mean(test_error), '\n')
- 
+    #saveOutputResults(test_outputs)
  
 if __name__ == "__main__":
     main()

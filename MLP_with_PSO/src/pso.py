@@ -31,7 +31,7 @@ class Swarm:
     '''
     searches for the best partivle position
     '''
-    def search(self, feedForward, X,y, print_step, epochs, file):
+    def search(self, feedForward, X,y, print_step, epochs):
         fitness_array = np.zeros(epochs)
         for i in range(epochs): #loop for the number of epochs
             for cur_particle in self.particles: #for each particle in the swarm

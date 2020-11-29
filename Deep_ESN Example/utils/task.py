@@ -58,11 +58,33 @@ def load_pianomidi(path, metric_function):
 def load_MG(path, metric_function):
     
     data = loadmat(os.path.join(path, 'MG.mat')) # load dataset
+    myData = loadmat('POF60m_PAMExp_2PAM_DR600Mbps(single column).mat')   
 
     dataset = Struct()
-    dataset.name = data['dataset'][0][0][0][0]
-    dataset.inputs = data['dataset'][0][0][1][0]
-    dataset.targets = data['dataset'][0][0][2][0]
+    #myStuff = Struct()
+    #dataset.name = data['dataset'][0][0][0][0]
+    #dataset.inputs = data['dataset'][0][0][1][0]
+    #dataset.targets = data['dataset'][0][0][2][0]
+
+    #print(dataset.targets)
+    
+   
+    dataset.name = "PAMsym500mbps"
+    Rx = myData['PAMsymRx'].reshape((1,-1))
+    Tx = myData['PAMsymTx'].reshape((1,-1))
+
+    dataset.inputs = Rx[0:1004020]
+    dataset.targets = Tx[0:1004020]
+
+
+    dataset.inputs = np.expand_dims(dataset.inputs, axis=0)
+    #dataset.inputs = np.expand_dims(dataset.inputs, axis=0)
+    dataset.targets = np.expand_dims(dataset.targets, axis=0)
+    #dataset.targets = np.expand_dims(dataset.targets, axis=0)
+
+
+    print("Name",dataset.name)
+    #print("Targets",dataset.targets)
 
     # input dimension
     Nu = dataset.inputs[0].shape[0]
@@ -74,9 +96,12 @@ def load_MG(path, metric_function):
     optimization_problem = np.argmin   
     
     
-    TR_indexes = range(4000) # indexes for training, validation and test set in Piano-midi.de task
-    VL_indexes = range(4000,5000)
-    TS_indexes = range(5000,9999)
+    #TR_indexes = range(150000) # indexes for training, validation and test set in Piano-midi.de task
+    #VL_indexes = range(150000,251004)
+    #TS_indexes = range(251004,502008)
     
+    TR_indexes = range(500000) # indexes for training, validation and test set in Piano-midi.de task
+    VL_indexes = range(500000,600000)
+    TS_indexes = range(600000,800000)
     return dataset, Nu, error_function, optimization_problem, TR_indexes, VL_indexes, TS_indexes
   
