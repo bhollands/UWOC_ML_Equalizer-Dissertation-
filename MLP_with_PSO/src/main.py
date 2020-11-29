@@ -23,7 +23,7 @@ configures some aspects of the network
 '''
 def configure(file_select):
     
-    if file_select == "equ":
+    if file_select == "uwoc":
         myData = loadmat('POF60m_PAMExp_2PAM_DR600Mbps(single column).mat')   
         Rx = myData['PAMsymRx']#.reshape((1,-1))
         Tx = myData['PAMsymTx']#.reshape((1,-1))
