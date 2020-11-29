@@ -62,7 +62,7 @@ def singleRun(file, activationFunc, hiddenLayersSize, numOfHidden, save, epochs,
         #saveFitness(result[1], file)
 
 def main():
-    singleRun(file="equ", activationFunc="cosine", hiddenLayersSize = 5, 
+    singleRun(file="uwoc", activationFunc="cosine", hiddenLayersSize = 5, 
                 numOfHidden = 2, save=True, epochs=50, numParticels=200,  
                 posRange=(-2.0,2.0), velRange=(-2.0, 2.0), 
                 coef = (0.5,0.3), iWeightRange = (0.9, 0.9))
