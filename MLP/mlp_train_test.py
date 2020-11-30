@@ -40,7 +40,6 @@ opt = tf.keras.optimizers.SGD(
     learning_rate=0.01, momentum=0.0, nesterov=False, name="SGD") #gradient decent
 
 model.compile(loss='mse', optimizer='SGD', metrics=['accuracy']) #compile the model
-#model.summary()
 
 checkpoint_path = "MLP\model_checkpoints\cp.ckpt"
 checkpoint_dir = os.path.dirname(checkpoint_path)
