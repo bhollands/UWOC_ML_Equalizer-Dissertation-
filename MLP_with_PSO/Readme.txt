@@ -45,8 +45,9 @@ singlerun() - This simply trains the network for the specified settings. The net
 In the singleRun files the columns are as follows 
 
 for "_results_<file>_<activation function>"
-0 - Actual output from the function
-1 - Network output for that run
+0 - Neural Network output for that run
+1 - What the network is trying to achive
+
 
 For "_fitness_results_<file>_<activation function>"
  0 - fitness per epoch

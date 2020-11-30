@@ -8,7 +8,7 @@ from scipy.io import loadmat
 saves the results of a run
 '''
 def saveResults(predict, actual, activeFunc, file, fitness):
-    newArr = np.column_stack((actual, predict))
+    newArr = np.column_stack((predict,actual))
     predict = pd.DataFrame(newArr)
     fitness = pd.DataFrame(fitness)
 
@@ -67,10 +67,6 @@ def main():
                 posRange=(-2.0,2.0), velRange=(-2.0, 2.0), 
                 coef = (0.5,0.3), iWeightRange = (0.9, 0.9))
 
-    # recordAllPossible(hiddenLayersSize = 5, numOfHidden = 2, save=True, 
-    #             epochs=50, numParticels=200,  
-    #             posRange=(-2.0,2.0), velRange=(-2.0, 2.0), 
-    #             coef = (0.5,0.3), iWeightRange = (0.9, 0.9))
 
 
 if __name__ == "__main__":

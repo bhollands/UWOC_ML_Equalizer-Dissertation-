@@ -6,6 +6,8 @@ This is a Feed forward Multi-Layer Perceptron neural network optimised with Grad
 
 ---Requirments---
 Python3 (3.8.6) - Older versions may work
+keras (2.4.3)
+tensorflow (2.3.1)
 Numpy (1.18.5)
 Pandas (1.1.3)
 openpyxl (3.0.5)
