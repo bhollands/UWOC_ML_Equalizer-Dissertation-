@@ -69,9 +69,8 @@ def saveResults(predict,input_values, perfect):
     predict = pd.DataFrame(newArr)
 
     output_filepath = 'MLP\Results\_results_keras.xlsx'
-    #fitness_filepath = 'NN_output data\_fitness_results_'+file +'_'+activeFunc+'.xlsx'
     predict.to_excel(output_filepath, index = False)
-    #fitness.to_excel(fitness_filepath, index = False)
+  
 
 
 saveResults(y_pred, X_test, y_test)

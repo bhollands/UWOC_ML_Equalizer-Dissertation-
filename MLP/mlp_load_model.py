@@ -26,9 +26,7 @@ def saveResults(predicted, input_values, perfect):
     predict = pd.DataFrame(newArr)
 
     output_filepath = 'MLP\Results\_results_keras_trained_model.xlsx'
-    #fitness_filepath = 'NN_output data\_fitness_results_'+file +'_'+activeFunc+'.xlsx'
     predict.to_excel(output_filepath, index = False)
-    #fitness.to_excel(fitness_filepath, index = False)
 
 def create_model():
     model = Sequential()
@@ -47,4 +45,4 @@ model.load_weights(checkpoint_path)
 loss, acc = model.evaluate(PAMsymRx_Array,PAMsymTx_Array)
 print("Trained model:", loss)
 y_pred = model.predict(PAMsymRx_Array, batch_size=128, verbose=0)
-#saveResults(y_pred,PAMsymRx_Array, PAMsymTx_Array)
+saveResults(y_pred,PAMsymRx_Array, PAMsymTx_Array)

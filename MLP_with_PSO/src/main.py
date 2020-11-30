@@ -25,8 +25,8 @@ def configure(file_select):
     
     if file_select == "uwoc":
         myData = loadmat('POF60m_PAMExp_2PAM_DR600Mbps(single column).mat')   
-        Rx = myData['PAMsymRx']#.reshape((1,-1))
-        Tx = myData['PAMsymTx']#.reshape((1,-1))
+        Rx = myData['PAMsymRx']
+        Tx = myData['PAMsymTx']
         X = Rx[0:20000] #set to 1004040 for full dataset
         y = Tx[0:20000]
         single_input = True
