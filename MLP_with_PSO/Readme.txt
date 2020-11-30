@@ -2,12 +2,12 @@ Author - Bernard Hollands
 
 MLP_with_PSO was oringally written for F20BC at Heriot-Watt and adapted for final year project
 
-This is a Feed forward Multi-Layer Perceptron neural network optimised using 
-Particel Swarm Optimisation for solving mathematical functions with the option of changing the activation function.
+This is a Feed forward Multi-Layer Perceptron neural network optimised with a  
+Particel Swarm Optimiser for solving mathematical functions with the option of changing the activation function.
 
-In current configuration all data can be seen in the 'Data' folder. All given data has been converted to .csv
+In current configuration data can be seen in the 'Data' folder. The current configuration is setup to run on PAM UWOC data.
 
-once run this results are recored in 'NN_output_data' folder in the form .xlsx (excel files)
+once run this results are recored in 'NN_output_data' folder in the form .xlsx (excel files) fitness is also printed to terminal
 
 ---Requirments---
 Python3 (3.8.6) - Older versions may work
