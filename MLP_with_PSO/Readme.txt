@@ -29,7 +29,7 @@ XOR Funcion - "xor"
 UWOC Data - "uwoc" : Dissertation Specific
 
 
----Choice of activation functions---
+---choice of activation functions---
 Cosine - "cosine"
 Hyperbolic Tangent - "hypertangent"
 Gaussian function - "gaussian"
