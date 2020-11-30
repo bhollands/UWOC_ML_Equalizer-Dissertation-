@@ -39,8 +39,12 @@ Sigmoid Function - "sigmoid"
 You can select either any of the excel files in the <Data> directory 
 or equ to run on the 600Mpbs dataset.
 
+---Results---
+Results are stored in the 'NN_ouput data' folder
 singlerun() - This simply trains the network for the specified settings. The network output and fitness are recorded.
-In the singleRun files the columns are as follows for "_results_<file>_<activation function>"
+In the singleRun files the columns are as follows 
+
+for "_results_<file>_<activation function>"
 0 - Actual output from the function
 1 - Network output for that run
 
