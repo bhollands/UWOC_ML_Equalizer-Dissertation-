@@ -2,7 +2,7 @@ Author - Bernard Hollands
 
 MLP_with_PSO was oringally written for F20BC at Heriot-Watt and adapted for final year project
 
-This is a Feed forward Multi-Layer Perceptron neural network optimised with a  
+This is a Feed forward Multi-Layer Perceptron Neural Network optimised with a  
 Particel Swarm Optimiser for solving mathematical functions with the option of changing the activation function.
 
 In current configuration data can be seen in the 'Data' folder. The current configuration is setup to run on the first 20000 PAM UWOC data points. This can be set upto 1004040 in the 'configure()' function. This however may take a long time to run.
