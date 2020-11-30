@@ -26,4 +26,4 @@ Each column is labled as 0,1,2 they are as follows
 
 Best Achived loss - 0.68 
 
-So far, have been unable to beat this platue disite many sizes of nnetwork or amaount of training data
+So far, have been unable to beat this platue disite many sizes of network, amaount of training data, number of epochs etc...
