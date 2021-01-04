@@ -2,7 +2,7 @@ Code written for Final Year Project of Bernard Hollands
 
 More Detailed readme.txt files are written in the specific folders
 
----Instrictions to MLP with PSO---
+---Instrictions to run MLP with PSO---
 1. Clone the repository localy or download as .zip
 2. To run goto 'MLP_with_PSO/src/main.py'
 3. Run the python file 'main.py' | There are more guidelines in the folder
