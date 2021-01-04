@@ -7,6 +7,7 @@ from scipy.io import loadmat
 from keras.models import Sequential
 from keras.layers import Dense, Dropout
 from keras.optimizers import RMSprop
+from sklearn.preprocessing import MinMaxScaler
 
 in_file = os.path.dirname(os.path.abspath(__file__)) #fix later
 
@@ -15,11 +16,15 @@ checkpoint_dir = os.path.dirname(checkpoint_path)
 
 myData = loadmat('POF60m_PAMExp_2PAM_DR600Mbps.mat')   
 
-Rx = myData['PAMsymRxMat'].flatten()#.reshape((1,-1))
-Tx = myData['PAMsymTxMat'].flatten()#.reshape((1,-1))
+Rx = myData['PAMsymRxMat'].reshape((-1,1))
+Tx = myData['PAMsymTxMat'].reshape((-1,1))
 
-PAMsymRx_Array = Rx[0:15060300] #set to 15060300 for full dataset
-PAMsymTx_Array = Tx[0:15060300]
+PAMsymRx_Array = Rx[0:150]#60300] #set to 15060300 for full dataset
+PAMsymTx_Array = Tx[0:150]#60300]
+scalar = MinMaxScaler(feature_range=(0,1))
+
+datasetRx = scalar.fit_transform(PAMsymRx_Array)
+datasetTx = scalar.fit_transform(PAMsymTx_Array)
 
 def saveResults(predicted, input_values, perfect):
     newArr = np.column_stack((predicted,input_values, perfect))
@@ -42,7 +47,7 @@ def create_model():
 
 model = create_model()
 model.load_weights(checkpoint_path)
-loss, acc = model.evaluate(PAMsymRx_Array,PAMsymTx_Array)
+loss, acc = model.evaluate(datasetRx,datasetTx)
 print("Trained model:", loss)
 y_pred = model.predict(PAMsymRx_Array, batch_size=128, verbose=0)
-saveResults(y_pred,PAMsymRx_Array, PAMsymTx_Array)
+saveResults(y_pred,datasetRx, datasetTx)
