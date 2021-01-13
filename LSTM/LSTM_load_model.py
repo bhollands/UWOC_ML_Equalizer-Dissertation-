@@ -15,8 +15,10 @@ checkpoint_dir = os.path.dirname(checkpoint_path)
 
 myData = loadmat('POF60m_PAMExp_2PAM_DR600Mbps.mat')   
 
-Rx = myData['PAMsymRxMat'].flatten()#.reshape((1,-1))
+Rx = myData['PAMsymRxMat'].reshape((1,-1))
 Tx = myData['PAMsymTxMat'].flatten()#.reshape((1,-1))
+#Rx.reshape(-1,1)
+print(Rx)
 
 PAMsymRx_Array = Rx[0:15060300] #set to 15060300 for full dataset
 PAMsymTx_Array = Tx[0:15060300]

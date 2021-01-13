@@ -58,24 +58,19 @@ def load_pianomidi(path, metric_function):
 def load_UWOC(path, metric_function):
     
     #data = loadmat(os.path.join(path, 'MG.mat')) # load dataset
-    myData = loadmat('POF60m_PAMExp_2PAM_DR600Mbps(single column).mat')   
+    smallData = loadmat('POF60m_PAMExp_2PAM_DR600Mbps(single column).mat')   
+    largeData = loadmat('POF60m_PAMExp_2PAM_DR600Mbps.mat')   
+    dataset = Struct()    
 
-    dataset = Struct()
-    #myStuff = Struct()
-    #dataset.name = data['dataset'][0][0][0][0]
-    #dataset.inputs = data['dataset'][0][0][1][0]
-    #dataset.targets = data['dataset'][0][0][2][0]
+    dataset.name = "PAMsym600mbps"
+    Rx = smallData['PAMsymRx'].reshape((1,-1))#Mat']#.reshape((1,-1))
+    Tx = smallData['PAMsymTx'].reshape((1,-1))#Mat']#.reshape((1,-1))
+    print("Rx shape",Rx.shape)
 
-    #print(dataset.targets)
-    
-   
-    dataset.name = "PAMsym500mbps"
-    Rx = myData['PAMsymRx'].reshape((1,-1))
-    Tx = myData['PAMsymTx'].reshape((1,-1))
-
-    dataset.inputs = Rx[0:1004020]
-    dataset.targets = Tx[0:1004020]
-
+    dataset.inputs = Rx[0:200000]#15060300]
+    dataset.targets = Tx[0:200000]#15060300]
+    print(dataset.inputs)
+    print(dataset.targets)
 
     dataset.inputs = np.expand_dims(dataset.inputs, axis=0)
     #dataset.inputs = np.expand_dims(dataset.inputs, axis=0)
@@ -100,8 +95,8 @@ def load_UWOC(path, metric_function):
     #VL_indexes = range(150000,251004)
     #TS_indexes = range(251004,502008)
     
-    TR_indexes = range(500000) # indexes for training, validation and test set in Piano-midi.de task
-    VL_indexes = range(500000,600000)
-    TS_indexes = range(600000,800000)
+    TR_indexes = range(150000) # indexes for training, validation and test set in Piano-midi.de task
+    VL_indexes = range(150000,170000)
+    TS_indexes = range(170000,200000)
     return dataset, Nu, error_function, optimization_problem, TR_indexes, VL_indexes, TS_indexes
   

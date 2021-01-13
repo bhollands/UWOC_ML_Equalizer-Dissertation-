@@ -3,6 +3,7 @@ from network import *
 import pandas as pd
 import numpy as np
 from scipy.io import loadmat
+import matplotlib.pyplot as plt
 
 '''
 saves the results of a run
@@ -16,6 +17,19 @@ def saveResults(predict, actual, activeFunc, file, fitness):
     fitness_filepath = 'MLP_with_PSO/NN_output data/_fitness_results_'+file +'_'+activeFunc+'.xlsx'
     predict.to_excel(output_filepath, index = False)
     fitness.to_excel(fitness_filepath, index = False)
+    
+    plt.plot(predict,'r-o',markersize=4, label = "output")#linestyle = '-')
+    plt.plot(actual,'b-o',markersize=4, label = "ideal")#linestyle = '-')
+    #plt.plot(np_in, 'r-o',markersize=4, label = "input", linestyle = '--', linewidth = '1')
+    plt.xlabel('Number of Bits')
+    plt.ylabel('Bit State')
+    plt.grid(True)
+    plt.xlim(0,50)
+    plt.legend(loc='upper right')
+    plt.show()
+
+
+
 
 
 '''
@@ -27,8 +41,9 @@ def configure(file_select):
         myData = loadmat('POF60m_PAMExp_2PAM_DR600Mbps(single column).mat')   
         Rx = myData['PAMsymRx']
         Tx = myData['PAMsymTx']
-        X = Rx[0:20000] #set to 1004040 for full dataset
-        y = Tx[0:20000]
+        X = Rx[0:20000]#1004040] #set to 1004040 for full dataset
+        y = Tx[0:20000]#1004040]
+        #X = X/y
         single_input = True
     else: 
         data = data_reader() #Create new data reader
