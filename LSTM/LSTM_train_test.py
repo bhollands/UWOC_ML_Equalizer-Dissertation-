@@ -26,8 +26,8 @@ myData = loadmat('POF60m_PAMExp_2PAM_DR600Mbps(single column).mat')
 Rx = myData['PAMsymRx']#.reshape((1,-1))
 Tx = myData['PAMsymTx']#.reshape((1,-1))
 
-PAMsymRx_Array = Rx[0:1004040] #set to 1004040 for full dataset
-PAMsymTx_Array = Tx[0:1004040]
+PAMsymRx_Array = Rx[0:20000] #set to 1004040 for full dataset
+PAMsymTx_Array = Tx[0:20000]
 
 # scalar = MinMaxScaler(feature_range=(0,1))
 # PAMsymRx_Array = scalar.fit_transform(PAMsymRx_Array)
@@ -50,41 +50,53 @@ model.add(Dense(1))
 model.add(Dense(1))
 model.add(Dense(1))
 model.compile(loss='mean_squared_error', optimizer='adam')
-model.fit(X_train, y_train, epochs=100, batch_size=8, verbose=1)
+model.fit(X_train, y_train, epochs=10, batch_size=8, verbose=1)
 
-test_loss, test_accuracy = model.evaluate(X_test,y_test, verbose=0)
+#test_loss, test_accuracy = model.evaluate(X_test,y_test, verbose=0)
 
 y_pred = model.predict(X_test) #use test set to find accuracy
 
 
-plt.plot(y_pred, label="prediction")
-plt.plot(X_test.flatten(), label="input")
-plt.plot(y_test.flatten(), label="Actual")
 
+
+plt.plot(y_test.flatten(), 'b-o', markersize = 4, label="Ideal ")
+plt.plot(y_pred, 'r-o', markersize = 4, label="Output")
+#plt.plot(test_states, 'g-o', markersize = 4, label="Input")
 plt.legend(loc='upper right')
-plt.xlim([0,100])
+plt.xlabel("Number of bit")
+plt.ylabel("Bit status")
+plt.xlim([0,50])
 plt.show()
-#saveResults(y_pred, X_test, y_test)
-print('Test loss:', test_loss)
-print('Test Accuracy:', test_accuracy)
 
-'''
-plt.plot(PAMsymRx_Array)
-plt.plot(PAMsymTx_Array)
-plt.xlim([0,100])
-plt.show()
-'''
 
-'''
-Saving Results
-'''
-def saveResults(predict,input_values, perfect):
-    newArr = np.column_stack((predict, input_values, perfect))
-    predict = pd.DataFrame(newArr)
+# plt.plot(y_pred, label="prediction")
+# plt.plot(X_test.flatten(), label="input")
+# plt.plot(y_test.flatten(), label="Actual")
 
-    output_filepath = 'LSTM\Results\_results_keras.xlsx'
-    predict.to_excel(output_filepath, index = False)
-#print('Test loss:', test_loss)
-#print('Test Accuracy:', test_accuracy)
+# plt.legend(loc='upper right')
+# plt.xlim([0,100])
+# plt.show()
+# #saveResults(y_pred, X_test, y_test)
+# print('Test loss:', test_loss)
+# print('Test Accuracy:', test_accuracy)
+
+# '''
+# plt.plot(PAMsymRx_Array)
+# plt.plot(PAMsymTx_Array)
+# plt.xlim([0,100])
+# plt.show()
+# '''
+
+# '''
+# Saving Results
+# '''
+# def saveResults(predict,input_values, perfect):
+#     newArr = np.column_stack((predict, input_values, perfect))
+#     predict = pd.DataFrame(newArr)
+
+#     output_filepath = 'LSTM\Results\_results_keras.xlsx'
+#     predict.to_excel(output_filepath, index = False)
+# #print('Test loss:', test_loss)
+# #print('Test Accuracy:', test_accuracy)
 
 

@@ -51,6 +51,25 @@ def plotResults(predict):
     plt.show()
 
 
+def roundTo(array):
+    for i in range(array.size):
+        if array[i] > 0:
+            array[i] = 1
+        else:
+            array[i] = -1
+    return array
+
+def ber(toCheck, perfect):
+    error = 0
+    for i in range(perfect.size):
+        if toCheck[i] != perfect[i]:
+            error = error +1
+    ber = error/perfect.size
+    return ber
+        
+
+
+
 def main():
 
     # fix a seed for the reproducibility of results
@@ -63,8 +82,8 @@ def main():
     # load configuration for pianomidi task
     configs = config_MG(list(TR_indexes) + list(VL_indexes))
     # Be careful with memory usage
-    Nr = 25 # number of recurrent units
-    Nl = 10 # number of recurrent layers
+    Nr = 5 # number of recurrent units
+    Nl = 50 # number of recurrent layers
     reg = 0.0
     transient = 100
     deepESN = DeepESN(Nu, Nr, Nl, configs)
@@ -89,10 +108,17 @@ def main():
 
     test_targets = np.array(test_targets)
 
+    test_outputs = roundTo(test_outputs.flatten())
+
+    test_error_after = error_function(test_outputs, test_targets)
+    print("After rounding:", test_error_after)
+
+    bitErrorRate = ber(test_outputs.flatten(), test_targets.flatten())
+    print("BER: ", bitErrorRate)
 
     plt.plot(test_targets.flatten(), 'b-o', markersize = 4, label="Ideal ")
     plt.plot(test_outputs.flatten(), 'r-o', markersize = 4, label="Output")
-    plt.plot(test_states, 'g-o', markersize = 4, label="Input")
+    #plt.plot(test_states, 'g-o', markersize = 4, label="Input")
     plt.legend(loc='upper right')
     plt.xlabel("Number of bit")
     plt.ylabel("Bit status")
