@@ -83,8 +83,10 @@ class DeepESN():
                     
         # full-connected recurrent weights init      
         else:
+            print("yeet")
             for layer in range(Nl):
                 self.W[layer] = np.random.uniform(-1,+1, size = (Nr,Nr))
+                #print(self.W[layer])
         
         # layers init
         for layer in range(Nl):
@@ -214,7 +216,7 @@ class DeepESN():
             states = []
 
             for i_seq in range(len(inputs)):
-                print("Computing State: ", i_seq)
+                print("Computing State: ", i_seq+1)
                 states.append(self.computeGlobalState(inputs[i_seq], initialStates))
                 
         if verbose:        
@@ -274,4 +276,19 @@ class DeepESN():
     def computeOutput(self,state):
         # compute a linear combination between the global state and the output weights  
         state = np.concatenate(state,1)
+        #np.savetxt("Wout.csv", self.Wout, delimiter = ",")
         return self.Wout[:,0:-1].dot(state) + np.expand_dims(self.Wout[:,-1],1) # Wout product + add bias
+
+    def saveDeepESN(self):
+        np.savetxt("Wout.csv", self.Wout, delimiter = ",")
+
+    def loadDeepESN(self, data):
+        data = np.concatenate(data, 1)
+        savedNetwork = np.genfromtxt('Wout.csv', delimiter = ",")
+        savedNetwork = savedNetwork.reshape(1,-1)
+        return savedNetwork[:,0:-1].dot(data) + np.expand_dims(savedNetwork[:,-1],1)
+
+
+        #savedNetwork = np.genfromtxt('Wout.csv', delimiter = ",")
+        
+        #print("Sout: ", savedNetwork)

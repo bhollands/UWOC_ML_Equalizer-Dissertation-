@@ -20,14 +20,23 @@ import numpy as np
 
 # Accuracy function used to evaluate the prediction in polyphonic music tasks: true positive/(true positive + false positive + false negative)
 def computeMusicAccuracy(threshold,X,Y):
+    print("Threshhold", threshold)
     Y = np.concatenate(Y,1)
+    print(X)
     Nsys = np.sum(X>threshold, axis=0)
+    print("Nsys: ", Nsys)
+
+    print(Y)
     Nref = np.sum(Y>threshold, axis=0)
+    print("Nref: ", Nref)
     Ncorr = np.sum((X>threshold) * (Y>threshold), axis=0)
         
     TP = np.sum(Ncorr)
+    print("true positive", TP)
     FP = np.sum(Nsys-Ncorr)
+    print("false positive", FP)
     FN = np.sum(Nref-Ncorr)
+    print("False Negative", FN)
     ACCURACY = TP/float(TP + FP + FN)
     return ACCURACY
 
