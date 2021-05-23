@@ -18,64 +18,100 @@ from sklearn.metrics import mean_squared_error
 from sklearn.metrics import classification_report
 from sklearn.metrics import confusion_matrix
 
-myData = loadmat('POF60m_PAMExp_2PAM_DR600Mbps(single column).mat')   
+from keras.preprocessing.sequence import TimeseriesGenerator
+
+scaler = MinMaxScaler(feature_range=(0,1))
+myData = loadmat('POF60m_PAMExp_2PAM_DR600Mbps(single column).mat')  
+#myData = loadmat('UWOC27m_PAM4_125Mb_APDGain80_P7dBm.mat') 
 
 Rx = myData['PAMsymRx']#.reshape((1,-1))
 Tx = myData['PAMsymTx']#.reshape((1,-1))
+#print(Rx)
 
-datasetRx = Rx[0:20000]#1004020] #set to 1004040 for full dataset
-datasetTx = Tx[0:20000]#1004020]
+#Tx = np.genfromtxt('PAM_OS4_3_6dbm.csv', delimiter=',', usecols=1)
+#Rx = np.genfromtxt('PAM_OS4_3_6dbm.csv', delimiter=',', usecols=0)
+# print(Rx)
 
-
-plt.plot(datasetRx,'r-o', markersize = 4, label = "Rx")
-plt.plot(datasetTx,'b-o', markersize = 4, label = "Tx")
-plt.xlabel("Number of bit")
-plt.ylabel("Bit Value")
-plt.xlim(50,100)
-plt.ylim(-1.5, 1.5)
-plt.legend(loc='upper right')
-plt.show()
-
-
-
-print(mean_squared_error(Tx, Rx))
-
-counter = 0
-for x in range(1004020):
-    if Rx[x] != Tx[x]:
-        counter = counter+1
-
-print('Bit Error Rate', counter/1004020)
-
-#ber = datasetRx/datasetTx
-
-# scalar = MinMaxScaler(feature_range=(-0.5,0.5))
-
-# datasetRx = scalar.fit_transform(datasetRx)
-# datasetTx = scalar.fit_transform(datasetTx)
-
-(X_train, X_test, y_train, y_test) = train_test_split(
-    datasetRx, datasetTx, test_size = 0.15, random_state=42
-) #75% for training 25% for testing
+# plt.plot(Tx.flatten(), 'b-o', markersize = 4)#, label="Raw Tx")
+# plt.legend(loc='upper right')
+# plt.xlabel("Number of bit")
+# plt.ylabel("Bit status")
+# plt.xlim([100,150])
+# #plt.grid()
+# plt.show()
 
 
 
-class_names = np.array(["Plus 1","Minus 1"])
 
-batch_size = 64
-epochs = 5
+rescale = True
+
+if rescale:
+    Tx = Tx.reshape(-1,1)
+    Rx = Rx.reshape(-1,1)
+    #print(Tx)
+
+    Rx = scaler.fit_transform(Rx)
+    Tx = scaler.fit_transform(Tx)
+#print(Rx)
+
+
+
+
+#Rx = np.expand_dims(Rx, axis=0)
+#Tx = np.expand_dims(Tx, axis=0)
+#print(Rx)
+
+
+datasetRx = Rx[0:240000].flatten()#1004020] #set to 1004040 for full dataset
+datasetTx = Tx[0:240000].flatten()#1004020]
+rx = datasetRx
+tx = datasetTx
+
+###print(datasetRx)
+
+input_size = 1
+
+
+'''
+for i in range(len(gen)):
+	x, y = gen[i]
+	print('%s => %s' % (x, y))
+'''
+X_train = rx[0:20000]
+y_train = tx[0:20000]
+
+X_test = rx[20000:240000]
+y_test = tx[20000:240000]
+# (X_train, X_test, y_train, y_test) = train_test_split(
+#     rx, tx, test_size = 0.5, random_state=42, shuffle = False
+# ) #75% for training 25% for testing
+
+print(X_train)
+
+
+batch_size = 32
+epochs = 15
 model = Sequential()
 
-model.add(Dense(1, activation='softmax')) #first layer
-model.add(Dense(128, activation='softmax')) #hidden layers
-model.add(Dense(128, activation='softmax'))
-model.add(Dense(128, activation='softmax'))
-model.add(Dense(2, activation='softmax')) #output layer
+layer_size = 40
+model.add(Dense(layer_size, input_dim = input_size)) #first layer
+#model.add(Dense(layer_size, activation='selu')) #2
+#model.add(Dense(layer_size, activation='selu'))#3
+# model.add(Dense(layer_size, activation='selu'))#4
+# model.add(Dense(layer_size, activation='selu'))#5
+# model.add(Dense(layer_size, activation='selu'))#6
+# model.add(Dense(layer_size, activation='selu'))#7
+# model.add(Dense(layer_size, activation='selu'))#8
+#model.add(Dense(layer_size, activation='selu'))#9
+#model.add(Dense(layer_size, activation='selu'))#10
 
-opt = tf.keras.optimizers.SGD(
-    learning_rate=0.01, momentum=0.0, nesterov=False, name="SGD") #gradient decent
+model.add(Dense(1, activation='selu')) #output layer
 
-model.compile(loss='mse', optimizer='SGD', metrics=['accuracy']) #compile the model
+
+#opt = tf.keras.optimizers.SGD(
+#    learning_rate=0.01, momentum=0.0, nesterov=False, name="SGD") #gradient decent
+
+model.compile(loss='mse', optimizer='adam', metrics=['accuracy']) #compile the model
 
 checkpoint_path = "MLP\model_checkpoints\cp.ckpt"
 checkpoint_dir = os.path.dirname(checkpoint_path)
@@ -94,20 +130,22 @@ history = model.fit(x = X_train, y = y_train,
                     validation_data=(X_test, y_test),
                     callbacks = [cp_callback])
 
+#model.fit(gen, steps_per_epoch=1, epochs=epochs, verbose=1)
+
 test_loss, test_accuracy = model.evaluate(X_test,y_test, verbose=0)
 
-y_pred = model.predict(X_test, batch_size=64, verbose=0) #use test set to find accuracy
+y_pred = model.predict(X_test, verbose=1) #use test set to find accuracy
 #print(y_pred)
 
+# class_names = ["zero", "one"]
+# #y_pred_bool = np.argmax(y_pred, axis=1)
+# print('\nTest accuracy:', test_accuracy)
+# print(classification_report(y_test, y_pred, target_names=class_names))
 
-y_pred_bool = np.argmax(y_pred, axis=1)
-print('\nTest accuracy:', test_accuracy)
-print(classification_report(y_test, y_pred_bool, target_names=class_names))
 
-
-label_numbers = [0,1]
-print("Confusion Matrix")
-print(print(confusion_matrix(y_test, y_pred_bool, labels = label_numbers)))
+# label_numbers = [0,1]
+# print("Confusion Matrix")
+# print(print(confusion_matrix(y_test, y_pred, labels = label_numbers)))
 
 def saveResults(predict,input_values, perfect):
     newArr = np.column_stack((predict, input_values, perfect))
@@ -116,58 +154,127 @@ def saveResults(predict,input_values, perfect):
     output_filepath = 'MLP\Results\_results_keras.xlsx'
     predict.to_excel(output_filepath, index = False)
   
+def calcBer(Rx, Tx):
+    error = 0
+    for x in range(Rx.size):
+        if Rx[x] != Tx[x]:
+            error  = error +1
+    
+    return error/Rx.size
 
-plt.plot(y_pred, label = "output")
-plt.plot(y_test, label = "ideal")
+def classify2PAM(array):
+    for i in range(array.size):
+        if array[i] >= 0.5:
+            array[i] = 1
+        else:
+            array[i] = 0
+    return array
 
-plt.xlim(0,100)
-plt.legend(loc='upper right')
-plt.show()
+def classify4PAM(array):
+    for i in range(array.size):
+        if array[i] >= 0.83329264:
+            array[i] = 3
+        elif array[i]  >= 0.5 and array[i] < 0.83329264:
+            array[i] = 2#0.6666463191307532
+        elif array[i]  > 0.16667684 and array[i] < 0.5:
+            array[i] = 1#0.33335368086924677
+        elif array[i]  <= 0.16667684:
+            array[i] = 0
+
+    return array
+
+
+def pam4Ber(toCheck, perfect):
+    bitError = 0
+    localError = 0
+    toCheck = toCheck.reshape(-1,4)
+    perfect = perfect.reshape(-1,4)
+    size = int(perfect.size/4)
+    for i in range(size):#go through entir dataset
+        a = toCheck[i]
+        b = perfect[i]
+        if not np.array_equal(a,b): #if they are not equal
+            for y in range(a.size):
+                if a[y] != b[y]: #see how many are not equal
+                    #print("Error:", a[y], ' != ', b[y] )
+                    localError = localError + 1
+            if localError >= 2: #if there are 2 or more error
+                bitError = bitError +1 #the bit has failed
+            localError = 0
+            
+    ber = bitError/size
+    return ber 
+
+def back_to_original(array):
+    for i in range(array.size):
+        if array[i] == 1:
+            array[i] = 8191
+        elif array[i] == 0.6666463191307532:
+            array[i] = 2730
+        elif array[i] == 0.33335368086924677:
+            array[i] = -2730
+        elif array[i] == 0:
+            array[i] = -8191
+    return array
+
+
+from sklearn.metrics import classification_report
+from sklearn.metrics import confusion_matrix
+import scikitplot as skplt
+import pandas as pd
+import seaborn as sns
+#y_pred = classify4PAM(y_pred.flatten())
+#print(y_pred)
+#y_pred = back_to_original(y_pred)
+# print(y_pred)
+
+#y_test = classify4PAM(y_test.flatten())
+#ber = pam4Ber(y_pred.flatten(), y_test.flatten())
+print(y_pred.shape)
+print(y_test.shape)
+
+from scipy.io import savemat
+#myData = loadmat('UWOC27m_PAM4_125Mb_APDGain80_P7dBm.mat')
+orig_Rx = myData['PAMsymRx']#.reshape((1,-1))#Mat']#.reshape((1,-1))
+orig_Tx = myData['PAMsymTx']#.reshape((1,-1))#Mat']#.reshape((1,-1))
+
+
+equalized = y_pred.reshape(-1,1)
+Tx = orig_Tx[20000:240000].reshape(-1,1)
+
+
+Input =orig_Rx[20000:240000].reshape(-1,1)
+
+if rescale:
+    equalized = scaler.inverse_transform(equalized)
+#Rx = y_pred.reshape(-1,1)
+#Tx = y_test.reshape(-1,1)
+
+
+#equalized = scalar2.fit_transform(equalized)
+#Tx = scalar2.fit_transform(Tx)
+mdic = {"Rx": equalized, "Tx": Tx, "input":Input}
+savemat("equalizedOutput.mat", mdic)
+
+#print("Bit Error Rate:", ber)
 
 print('Test loss:', test_loss)
 print('Test Accuracy:', test_accuracy)
-saveResults(y_pred, X_test, y_test)
+
+#print("y_test", y_test)
+plt.plot(y_pred.flatten(), label = "output")
+plt.plot(y_test.flatten(), label = "ideal")
 
 
+#plt.plot(equalized.flatten(), label = "equalised")
+#plt.plot(Tx.flatten(), label = "perf")
 
 
-#scalar_end = MinMaxScaler(feature_range=(0,1))
-#rescaledTx = scalar_end.fit_transform(y_test)
-'''
-#mse = (np.square(y_pred - rescaledTx)).mean(axis=None)
-#rescaledTx = rescaledTx.flatten()
-y_pred = y_pred.flatten()
+plt.xlim(2000,2100)
+plt.legend(loc='upper right')
+#skplt.metrics.plot_confusion_matrix(y_test, y_pred, normalize = False, cmap=plt.cm.Blues)
+plt.show()
 
-#print(best)
-y_pred = np.round(y_pred) #rounding
-#print("Mean Squared Error:", mse)
+# #saveResults(y_pred, X_test, y_test)
 
-
-datasetRx = np.round(datasetRx)
-
-
-bitError = 0
-bitError_noML = 0
-
-datasetRx = datasetRx.flatten()
-datasetTx = datasetTx.flatten()
-
-
-print("Computing bit error Rate")
-for x in range(len(y_pred)):
-    if datasetRx[x] == datasetTx[x]:
-        bitError_noML = bitError_noML +1
-
-    if y_pred[x] == y_test.flatten()[x]:
-        bitError = bitError+1
-
-
-BitErrorRate = bitError/len(y_pred)
-
-BitErrorRate_noML = bitError_noML/len(y_pred)
-
-
-print("BER ML: ",BitErrorRate)
-print("BER no-ML:", BitErrorRate_noML)
-'''
 

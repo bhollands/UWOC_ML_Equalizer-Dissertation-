@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import os
 from sklearn.model_selection import train_test_split #to make a % of the dataset for quicker testing
-from model import EchoStateNetwork
+from DeepRC import SimpleDeepESNClassifier
 
 import matplotlib.pyplot as plt
 from keras.models import Sequential
@@ -26,8 +26,19 @@ datasetTx = scalar.fit_transform(PAMsymTx_Array)
     datasetRx, datasetTx, test_size = 0.15, random_state=42
 ) #75% for training 25% for testing
 
-ESN = EchoStateNetwork(units=32)
-ESN.fit(X_train, y_train)
-y_test_hat = ESN.predict(X_test)
-Train_MSE = ESN.MSE_Score(X_train, y_train)
-Test_MSE = ESN.MSE_Score(X_test, y_test)
+
+model = SimpleDeepESNClassifier(num_classes = 2)
+
+output = model.call(y_train)
+plt.plot(output)
+plt.xlim(0,50)
+plt.show()
+
+
+
+#model.compile(loss='mean_squared_error')
+
+#model.fit(X_train, y_train)
+# y_test_hat = ESN.predict(X_test)
+# Train_MSE = ESN.MSE_Score(X_train, y_train)
+# Test_MSE = ESN.MSE_Score(X_test, y_test)
