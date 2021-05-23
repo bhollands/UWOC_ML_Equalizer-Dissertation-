@@ -1,5 +1,12 @@
 Code written for Final Year Project of Bernard Hollands
 
+All code and files used in project are here Inlcudeding attempted models and used libaries. For running and specific libaries may need to be installed. 
+
+The succsessful ML Code is in the in folder "Echo_State_Network_DeepESN". 
+
+The Bit Error Rate calculation was done in the "BER_Calculator.m" file.
+
+
 More Detailed readme.txt files are written in the specific folders
 
 ---Instrictions to run MLP with PSO---
