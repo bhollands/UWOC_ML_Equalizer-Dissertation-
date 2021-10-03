@@ -1,5 +1,7 @@
 Code written for Final Year Project of Bernard Hollands
 
+Final Report Available in reposity as "Equalisation_of_UWOC_using_ANN.pdf"
+
 All code and files used in project are here Inlcudeding attempted models and used libaries. For running and specific libaries may need to be installed. 
 
 The succsessful ML Code is in the in folder "Echo_State_Network_DeepESN". 
